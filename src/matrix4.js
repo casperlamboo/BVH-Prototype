@@ -112,11 +112,13 @@ export const perspective = (fov, aspect, near, far) => {
   ];
 };
 export const screen = (width, height) => {
-  const halfWidth = width / 2;
-  const halfHeight = height / 2;
+  const w = width / 2;
+  const h = height / 2;
 
-  return multiply(
-    translate({ x: halfWidth, y: halfHeight, z: 0 }),
-    scale({ x: halfWidth, y: halfHeight, z: 1 })
-  );
+  return [
+    w, 0, 0, w,
+    0, h, 0, h,
+    0, 0, 1, 0,
+    0, 0, 0, 1,
+  ];
 };
