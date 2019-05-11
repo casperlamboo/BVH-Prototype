@@ -88,7 +88,7 @@ fetch(bvhFileURL).then(result => result.text()).then(data => {
     context.strokeStyle = '#dddddd';
 
     let poseIndex = 0;
-    const queue = [{ joint: hierachy, parent: null }];
+    const queue = [{ joint: hierachy, parent: m }];
 
     while (queue.length !== 0) {
       const { parent, joint } = queue.shift();
@@ -115,25 +115,17 @@ fetch(bvhFileURL).then(result => result.text()).then(data => {
         y: translateY,
         z: translateZ
       })), localMatrix);
+      localMatrix = matrix4.multiply(parent, localMatrix);
 
-      if (parent) {
-        localMatrix = matrix4.multiply(parent, localMatrix);
-      }
-
-      const pos = vector3.applyMatrix4({ x: 0, y: 0, z: 0 }, localMatrix);
-      const { x, y } = vector3.applyMatrix4(pos, m);
+      const { x, y } = vector3.applyMatrix4({ x: 0, y: 0, z: 0 }, localMatrix);
       context.fillRect(x, y, 3, 3);
       // context.fillText(joint.name, x, y);
 
-      if (parent) {
-        const end = vector3.applyMatrix4({ x: 0, y: 0, z: 0 }, parent);
-        const { x: px, y: py } = vector3.applyMatrix4(end, m);
-
-        context.beginPath();
-        context.moveTo(x, y);
-        context.lineTo(px, py);
-        context.stroke();
-      }
+      const { x: px, y: py } = vector3.applyMatrix4({ x: 0, y: 0, z: 0 }, parent);
+      context.beginPath();
+      context.moveTo(x, y);
+      context.lineTo(px, py);
+      context.stroke();
 
       if (joint.joints) {
         for (let i = 0; i < joint.joints.length; i ++) {
