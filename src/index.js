@@ -133,7 +133,11 @@ fetch(bvhFileURL).then(result => result.text()).then(data => {
           queue.splice(i, 0, { parent: localMatrix, joint: joint.joints[i] });
         }
       } else if (joint.endSite) {
-        // ...
+        const { x: ex, y: ey } = vector3.applyMatrix4(joint.endSite, localMatrix);
+        context.beginPath();
+        context.moveTo(x, y);
+        context.lineTo(ex, ey);
+        context.stroke();
       }
     }
   });
