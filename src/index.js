@@ -74,14 +74,14 @@ fetch(bvhFileURL).then(result => result.text()).then(data => {
     const pose = motion.keyFrames[frame];
 
     const m = matrix4.multiply(
-      matrix4.screen(canvas.width, canvas.height),
       matrix4.multiply(
-        matrix4.perspective(Math.PI / 2, canvas.width / canvas.height, 0.1, 1000),
         matrix4.multiply(
-          matrix4.translate({ x: 0, y: -100, z: 400 }),
-          matrix4.rotationY(t * 0.0001)
-        )
-      )
+          matrix4.screen(canvas.width, canvas.height),
+          matrix4.perspective(Math.PI / 2, canvas.width / canvas.height, 0.1, 1000),
+        ),
+        matrix4.translate({ x: 0, y: -100, z: 400 })
+      ),
+      matrix4.rotationY(t * 0.0001)
     );
 
     context.fillStyle = '#dddddd';
