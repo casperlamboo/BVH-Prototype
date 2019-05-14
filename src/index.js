@@ -90,7 +90,8 @@ fetch(bvhFileURL).then(result => result.text()).then(data => {
     let poseIndex = 0;
     const queue = [{ joint: hierachy, parent: m }];
 
-    while (queue.length !== 0) {
+    let first = true;
+    while (queue.length > 0) {
       const { parent, joint } = queue.shift();
 
       // construct local matrix
@@ -122,10 +123,12 @@ fetch(bvhFileURL).then(result => result.text()).then(data => {
       // context.fillText(joint.name, x, y);
 
       const { x: px, y: py } = vector3.applyMatrix4({ x: 0, y: 0, z: 0 }, parent);
-      context.beginPath();
-      context.moveTo(x, y);
-      context.lineTo(px, py);
-      context.stroke();
+      if (!first) {
+        context.beginPath();
+        context.moveTo(x, y);
+        context.lineTo(px, py);
+        context.stroke();
+      }
 
       if (joint.joints) {
         for (let i = 0; i < joint.joints.length; i ++) {
@@ -139,6 +142,7 @@ fetch(bvhFileURL).then(result => result.text()).then(data => {
         context.lineTo(ex, ey);
         context.stroke();
       }
+      first = false;
     }
   });
 });
